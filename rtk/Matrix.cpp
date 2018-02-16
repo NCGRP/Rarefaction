@@ -666,7 +666,9 @@ void Matrix::readColNms(ifstream& in) {
 	}
 }
 
-int Matrix::iniCols(ifstream& in) {
+
+int Matrix::iniCols(stringstream& in) {
+//int Matrix::iniCols(ifstream& in) {
 	int ini_ColPerRow = 0;
 	int cnt = 0;
 	string line;
@@ -694,7 +696,7 @@ int Matrix::iniCols(ifstream& in) {
 			}
 		}
 		cnt++;
-		if (cnt > 10) { break; }
+		if (cnt > 10) { break; } //checks only the first 10 rows for same column number
 	}
 	if (ini_ColPerRow == 0) {
 #ifdef notRpackage
@@ -709,7 +711,7 @@ int Matrix::iniCols(ifstream& in) {
 
 	return ini_ColPerRow;
 }
-Matrix::Matrix(const string inF, const string outF, vector<double> colsums, vector<string> colNms)
+/*Matrix::Matrix(const string inF, const string outF, vector<double> colsums, vector<string> colNms)
 	: rowIDs(0), colIDs(0), maxCols(0), HI(0), maxLvl(0), sampleNameSep(""), doSubsets(false), doHigh(false)
 {
 	//reads matrix from HDD
@@ -805,6 +807,8 @@ Matrix::Matrix(const string inF, const string outF, vector<double> colsums, vect
 	in.close();
 	out.close();
 }
+*/
+/*
 Matrix::Matrix(const string inF, const string outF, const string xtra, vector<string>& outFName, 
 			bool highLvl, bool NumericRowId, bool writeTmpFiles)
 	: rowIDs(0), colIDs(0), maxCols(0), HI(0), maxLvl(0), sampleNameSep(""), doSubsets(false), doHigh(highLvl)
@@ -956,7 +960,7 @@ Matrix::Matrix(const string inF, const string outF, const string xtra, vector<st
 		}
 	}
 	//write colSums
-	/*
+	
 	string oF2 = outF + sampleNameSep + "sums.txt";
 
 	out.open(oF2.c_str(),ios_base::out);
@@ -964,12 +968,12 @@ Matrix::Matrix(const string inF, const string outF, const string xtra, vector<st
 	for (size_t smpl=0;smpl<(colIDs.size()); smpl++){
 		out<<colIDs[smpl]<<"\t"<<colSum[smpl]<<endl;
 	}
-	out.close();*/
+	out.close();
 	#ifdef notRpackage
 	std::cout << "Read " << geneCnt << " genes" << endl;
 	#endif
 }
-
+*/
 
 
 
@@ -990,8 +994,22 @@ Matrix::Matrix(const string inF, const string xtra, bool highLvl)
 #ifdef notRpackage
 cerr << "Cant open file " << inF << endl; std::exit(11);
 #endif
-}
-	int ini_ColPerRow = iniCols(in);
+	}
+	
+	//make a demo input file as a stringstream, for further processing
+	stringstream ss;
+	ss << "out\tp1\tp2\tp3\tp4\n";
+	ss << "a1\t0\t1\t2\t4\n";
+	ss << "a2\t0\t1\t0\t10\n";
+	ss << "a3\t52\t1\t0\t10\n";
+	ss << "a4\t0\t0\t0\t20\n";
+	ss << "a5\t1\t1\t2\t40\n";
+	cout << ss.rdbuf();
+	
+	
+	int ini_ColPerRow = iniCols(ss);
+	getchar();
+	//int ini_ColPerRow = iniCols(in);
 	int cnt(0);
 
 

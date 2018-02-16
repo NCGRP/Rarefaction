@@ -212,10 +212,12 @@ options::options(int argc, char** argv) :input(""), output(""), mode(""),
             cerr << "Input must be specified\n";
             hasErr = true;
         }
-        if (output == "") {//just set some defaults
+
+/*        if (output == "") {//just set some defaults
             cerr << "Output must be specified\n";
             hasErr = true;
         }
+*/
         // default to min*0.95
         if(depth.size() == 0){
             depth.push_back(0.95);
@@ -265,7 +267,7 @@ void options::print_rare_details(){
 }
 
 
-
+/*
 void rareExtremLowMem(options * opts, string inF, string outF, int writeFiles, string arg4, int repeats, int numThr = 1, bool storeBinary = false){
     // this mode takes the file, reads it in memory
     // prints the columns to their own files
@@ -408,31 +410,31 @@ void rareExtremLowMem(options * opts, string inF, string outF, int writeFiles, s
     for (size_t i = 0; i < divvs.size(); i++){
         delete divvs[i];
     }
-    // write rarefaction matrices to disk
-    if(opts->write > 0){
-        //vector< string > rowNames = Mo->getRowNames();
-        if (opts->writeSwap) {
-            printRarefactionMatrix(opts, tmpMatFiles, outF, cntsNames, rowNames);
-        }
-        else {
-            printRarefactionMatrix(opts, MaRare, outF,  cntsNames, rowNames);
-        }
-
-    }
-
-    // compute chao2, ACE, ICE and write to file
-    vector<vector<mat_fl>> chao2(opts->depth.size());
-    vector<vector<mat_fl>> ICE(opts->depth.size());
-    vector<vector<mat_fl>> ACE(opts->depth.size());
-    computeChao2(chao2, abundInRow);
-    computeCE(ICE, abundInRow);
-    computeCE(ACE, occuencesInRow);
-    writeGlobalDiv(opts, ICE, ACE, chao2, outF + "global_diversity.tsv");
-
-    cout << "Finished\n";
+      // write rarefaction matrices to disk
+      if(opts->write > 0){
+          //vector< string > rowNames = Mo->getRowNames();
+          if (opts->writeSwap) {
+              printRarefactionMatrix(opts, tmpMatFiles, outF, cntsNames, rowNames);
+          }
+          else {
+              printRarefactionMatrix(opts, MaRare, outF,  cntsNames, rowNames);
+          }
+  
+      }
+  
+      // compute chao2, ACE, ICE and write to file
+      vector<vector<mat_fl>> chao2(opts->depth.size());
+      vector<vector<mat_fl>> ICE(opts->depth.size());
+      vector<vector<mat_fl>> ACE(opts->depth.size());
+      computeChao2(chao2, abundInRow);
+      computeCE(ICE, abundInRow);
+      computeCE(ACE, occuencesInRow);
+      writeGlobalDiv(opts, ICE, ACE, chao2, outF + "global_diversity.tsv");
+  
+      cout << "Finished\n";
 }
 
-
+*/
 
 
 void binaryStoreSample(options* opts, vector<vector<vector< string >>>& tmpMatFiles, rareStruct* tmpRS, vector<string>& rowNames, string outF,  vector<vector<string>>& cntsNames, bool reshapeMap){
@@ -539,9 +541,9 @@ void printRarefactionMatrix(options* opts, const vector<vector<vector< rare_map>
 int main(int argc, char* argv[])
 {
 
-    if (argc < 2) { cerr << "Not enough arguments. Use \"rtk -h\" for getting started.\n"; exit(3); }
+    //if (argc < 2) { cerr << "Not enough arguments. Use \"rtk -h\" for getting started.\n"; exit(3); }
 
-    clock_t tStart = clock();
+    //clock_t tStart = clock();
 
     options* opts = new options(argc, argv);
 
@@ -555,7 +557,7 @@ int main(int argc, char* argv[])
     //bool verbose = opts->verbose;
 
 
-
+/*
     //all modes that classify as rarefactions:
     if (mode == "rarefaction" || mode == "swap" || mode == "memory") {
         opts->print_rare_details();
@@ -684,7 +686,7 @@ else if (mode == "swap") {
     printf("Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
     std::exit(0);
 }
-else if (mode == "memory") {
+else */if (mode == "memory") {
     cout << "Loading input matrix to memory" << std::endl;
     Matrix* Mo = new Matrix(inF, "");//no arg for outfile &  hierachy | gene subset
     vector<DivEsts*> divvs(Mo->smplNum(), NULL);
@@ -817,37 +819,42 @@ else if (mode == "memory") {
         slots[j].inUse = false;
     }
 
+    //cout diversity only
+    medianDiv(outF, divvs, true, opts);
+/*
     // output matrix
     printDivMat(outF, divvs, true, opts);
     for (size_t i = 0; i < divvs.size(); i++) {
         delete divvs[i];
     }
 
-    // write rarefaction matrices to disk
-    if (opts->write > 0) {
-        vector< string > rowNames = Mo->getRowNames();
-        if (opts->writeSwap) {
-            printRarefactionMatrix(opts, tmpMatFiles, outF, cntsNames, rowNames);
-        }
-        else {
-            printRarefactionMatrix(opts, MaRare, outF,  cntsNames, rowNames);
-        }
-    }
 
-    delete Mo;
-
-    // compute chao2, ACE, ICE and write to file
-    vector<vector<mat_fl>> chao2(opts->depth.size());
-    vector<vector<mat_fl>> ICE(opts->depth.size());
-    vector<vector<mat_fl>> ACE(opts->depth.size());
-    computeChao2(chao2, abundInRow);
-    computeCE(ICE, abundInRow);
-    computeCE(ACE, occuencesInRow);
-    writeGlobalDiv(opts, ICE, ACE, chao2, outF + "global_diversity.tsv");
-
-    printf("CPU time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
-    //cout << "Finished\n";
-    std::exit(0);
+      // write rarefaction matrices to disk
+      if (opts->write > 0) {
+          vector< string > rowNames = Mo->getRowNames();
+          if (opts->writeSwap) {
+              printRarefactionMatrix(opts, tmpMatFiles, outF, cntsNames, rowNames);
+          }
+          else {
+              printRarefactionMatrix(opts, MaRare, outF,  cntsNames, rowNames);
+          }
+      }
+  
+      delete Mo;
+  
+      // compute chao2, ACE, ICE and write to file
+      vector<vector<mat_fl>> chao2(opts->depth.size());
+      vector<vector<mat_fl>> ICE(opts->depth.size());
+      vector<vector<mat_fl>> ACE(opts->depth.size());
+      computeChao2(chao2, abundInRow);
+      computeCE(ICE, abundInRow);
+      computeCE(ACE, occuencesInRow);
+      writeGlobalDiv(opts, ICE, ACE, chao2, outF + "global_diversity.tsv");
+  
+      printf("CPU time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
+      //cout << "Finished\n";
+      std::exit(0);
+*/
 }
 else {
     cout << "rtk run mode \"" << mode << "\" undefined.\nSee ./rtk -h for more information.\n";

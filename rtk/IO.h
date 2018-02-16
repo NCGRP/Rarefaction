@@ -88,6 +88,7 @@ public:
 	string SampleName;
 	int depth;
 };
+void medianDiv(const string outF, vector<DivEsts*>&, bool, options*);
 void printDivMat(const string outF, vector<DivEsts*>&, bool, options*);
 void printRareMat(const string outF,const vector< rare_map>& rMat, vector< string >& sampleNames, vector < string >& rowId);
 string printSimpleMap(const rare_map &vec, string outF, string id, vector<string> rowNames);

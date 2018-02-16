@@ -575,6 +575,13 @@ void DivEsts::print2file(const string file){
     }
     out.close();
 }*/
+void medianDiv(const string outF, vector<DivEsts*>& inD, bool printDIV, options* opts){
+    for (size_t i = 0; i < inD.size(); i++){
+		for( uint di = 0; di < opts->depth.size(); di++){
+                   cout << getMedian(inD[i]->richness[di]) << "\n";
+    	}
+    }
+}
 void printDivMat(const string outF, vector<DivEsts*>& inD, bool printDIV, options* opts){
 
     string outFmedian = outF + "median_alpha_diversity.tsv";
